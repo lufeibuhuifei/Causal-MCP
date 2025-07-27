@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+  # eQTL Server
+  eqtl-server:
+    build:
+      context: ./mcp-server-eqtl
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - MCP_SERVER_NAME=mcp-server-eqtl
+      - LOG_LEVEL=INFO
+
+  # GWAS Server
+  gwas-server:
+    build:
+      context: ./mcp-server-gwas
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    environment:
+      - MCP_SERVER_NAME=mcp-server-gwas
+      - LOG_LEVEL=INFO
+      - OPENGWAS_JWT=${OPENGWAS_JWT:-}
+
+  # MR Server
+  mr-server:
+    build:
+      context: ./mcp-server-mr
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - MCP_SERVER_NAME=mcp-server-mr
+      - LOG_LEVEL=INFO
+
+  # Knowledge Server
+  knowledge-server:
+    build:
+      context: ./mcp-server-knowledge
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8000"
+    environment:
+      - MCP_SERVER_NAME=mcp-server-knowledge
+      - LOG_LEVEL=INFO
+
+  # Client Application
+  client-app:
+    build:
+      context: ./client-app
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - EQTL_SERVER_URL=http://eqtl-server:8000
+      - GWAS_SERVER_URL=http://gwas-server:8000
+      - MR_SERVER_URL=http://mr-server:8000
+      - KNOWLEDGE_SERVER_URL=http://knowledge-server:8000
+    depends_on:
+      - eqtl-server
+      - gwas-server
+      - mr-server
+      - knowledge-server
+
+networks:
+  default:
+    name: causal-mcp-network

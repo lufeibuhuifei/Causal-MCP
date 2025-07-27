@@ -1,0 +1,116 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Configuration files (contain sensitive information)
+*.json
+!requirements.txt
+!package.json
+!tsconfig.json
+!docker-compose.yml
+
+# Specifically exclude sensitive config files
+jwt_config.json
+llm_config.json
+opengwas_config.json
+config.json
+.env
+.env.local
+.env.*.local
+
+# Data files
+*.pkl
+*.pickle
+*.csv
+*.tsv
+*.xlsx
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# Downloads and outputs
+downloads/
+outputs/
+results/
+plots/
+png/
+
+# Cache
+.cache/
+*.cache
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Streamlit
+.streamlit/
+
+# Docker
+.dockerignore
+
+# Git
+*.orig
