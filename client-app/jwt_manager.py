@@ -254,29 +254,29 @@ class JWTManager:
 
                         # 构建显示信息
                         if user_email != 'Unknown':
-                            message = f"✅ JWT令牌验证成功！用户: {user_email}"
+                            message = f"✅ JWT token verification successful! User: {user_email}"
                             if user_name:
                                 message += f" ({user_name})"
                             if jwt_valid_until:
-                                message += f", 有效期至: {jwt_valid_until}"
+                                message += f", Valid until: {jwt_valid_until}"
                             return True, message
                         else:
-                            return True, "✅ JWT令牌验证成功，可以访问OpenGWAS API"
+                            return True, "✅ JWT token verification successful, can access OpenGWAS API"
                     except:
-                        return True, "✅ JWT令牌验证成功，可以访问OpenGWAS API"
+                        return True, "✅ JWT token verification successful, can access OpenGWAS API"
                 elif response.status_code == 401:
-                    return False, "❌ JWT令牌无效或已过期"
+                    return False, "❌ JWT token invalid or expired"
                 elif response.status_code == 403:
-                    return False, "❌ JWT令牌权限不足"
+                    return False, "❌ JWT token insufficient permissions"
                 elif response.status_code == 429:
-                    return False, "❌ API请求频率超限，请稍后重试"
+                    return False, "❌ API request rate limit exceeded, please try again later"
                 else:
-                    return False, f"❌ API测试失败，状态码: {response.status_code}"
+                    return False, f"❌ API test failed, status code: {response.status_code}"
 
         except httpx.TimeoutException:
-            return False, "❌ API连接超时，请检查网络连接"
+            return False, "❌ API connection timeout, please check network connection"
         except Exception as e:
-            return False, f"❌ 测试失败: {str(e)}"
+            return False, f"❌ Test failed: {str(e)}"
     
     def get_token_info(self) -> Dict[str, Any]:
         """获取当前令牌的详细信息"""

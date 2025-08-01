@@ -18,89 +18,89 @@ from jwt_manager import jwt_manager
 
 def show_jwt_setup_guide():
     """显示JWT令牌配置指南"""
-    st.markdown("### 📋 OpenGWAS JWT令牌配置指南")
-    
-    with st.expander("🔍 什么是JWT令牌？", expanded=False):
+    st.markdown("### 📋 OpenGWAS JWT Token Configuration Guide")
+
+    with st.expander("🔍 What is a JWT Token?", expanded=False):
         st.markdown("""
-        **JWT (JSON Web Token)** 是OpenGWAS API的认证令牌，用于：
-        - 访问GWAS数据库中的研究数据
-        - 获取SNP-性状关联信息
-        - 确保API访问的安全性和速率限制
-        
-        **为什么需要JWT令牌？**
-        - OpenGWAS API需要认证才能访问完整数据
-        - 令牌有效期为14天，需要定期更新
-        - 不同用户级别有不同的访问限制
+        **JWT (JSON Web Token)** is an authentication token for OpenGWAS API, used for:
+        - Accessing research data in GWAS databases
+        - Retrieving SNP-trait association information
+        - Ensuring API access security and rate limiting
+
+        **Why do you need a JWT token?**
+        - OpenGWAS API requires authentication to access complete data
+        - Token validity period is 14 days, requires periodic renewal
+        - Different user levels have different access restrictions
         """)
-    
-    with st.expander("🔧 如何获取JWT令牌？", expanded=True):
+
+    with st.expander("🔧 How to obtain a JWT Token?", expanded=True):
         st.markdown("""
-        **步骤1: 注册OpenGWAS账户**
-        1. 访问 [OpenGWAS官网](https://api.opengwas.io/)
-        2. 点击右上角 "Sign up" 注册账户
-        3. 使用邮箱验证账户
-        
-        **步骤2: 获取JWT令牌**
-        1. 登录后访问 [个人资料页面](https://api.opengwas.io/profile/)
-        2. 在 "API Access" 部分找到 "JWT Token"
-        3. 点击 "Generate Token" 生成新令牌
-        4. 复制完整的JWT令牌字符串
-        
-        **步骤3: 配置到系统**
-        1. 将令牌粘贴到下方的输入框
-        2. 点击 "测试令牌" 验证有效性
-        3. 点击 "保存配置" 完成设置
+        **Step 1: Register OpenGWAS Account**
+        1. Visit [OpenGWAS Official Website](https://api.opengwas.io/)
+        2. Click "Sign up" in the top right corner to register an account
+        3. Verify your account using email
+
+        **Step 2: Obtain JWT Token**
+        1. After login, visit [Profile Page](https://api.opengwas.io/profile/)
+        2. Find "JWT Token" in the "API Access" section
+        3. Click "Generate Token" to create a new token
+        4. Copy the complete JWT token string
+
+        **Step 3: Configure in System**
+        1. Paste the token into the input box below
+        2. Click "Test Token" to verify validity
+        3. Click "Save Configuration" to complete setup
         """)
-    
-    with st.expander("⚠️ 注意事项", expanded=False):
+
+    with st.expander("⚠️ Important Notes", expanded=False):
         st.markdown("""
-        **令牌安全**
-        - JWT令牌是敏感信息，请勿分享给他人
-        - 令牌有效期为14天，过期后需要重新生成
-        - 系统会安全地存储您的令牌
-        
-        **访问限制**
-        - Trial账户：100次请求/10分钟
-        - Standard账户：100,000次请求/10分钟
-        - 超出限制会导致API调用失败
-        
-        **故障排除**
-        - 如果令牌测试失败，请检查网络连接
-        - 确保令牌完整复制，没有多余的空格
-        - 过期令牌需要重新生成
+        **Token Security**
+        - JWT token is sensitive information, do not share with others
+        - Token validity period is 14 days, needs regeneration after expiration
+        - System will securely store your token
+
+        **Access Limitations**
+        - Trial account: 100 requests/10 minutes
+        - Standard account: 100,000 requests/10 minutes
+        - Exceeding limits will cause API call failures
+
+        **Troubleshooting**
+        - If token test fails, please check network connection
+        - Ensure token is copied completely without extra spaces
+        - Expired tokens need to be regenerated
         """)
 
 def show_jwt_configuration():
     """显示JWT令牌配置界面"""
-    st.markdown("### 🔑 JWT令牌配置")
-    
+    st.markdown("### 🔑 JWT Token Configuration")
+
     # 检查当前配置状态
     token_info = jwt_manager.get_token_info()
-    
+
     if token_info.get('configured'):
-        st.success("✅ JWT令牌已配置")
-        
+        st.success("✅ JWT Token Configured")
+
         col1, col2 = st.columns(2)
         with col1:
-            st.info(f"**令牌长度**: {token_info.get('token_length', 'Unknown')} 字符")
-        
+            st.info(f"**Token Length**: {token_info.get('token_length', 'Unknown')} characters")
+
         with col2:
             if 'expires_in_days' in token_info:
                 days_left = token_info['expires_in_days']
                 if days_left > 7:
-                    st.success(f"**有效期**: 还有 {days_left} 天")
+                    st.success(f"**Validity**: {days_left} days remaining")
                 elif days_left > 0:
-                    st.warning(f"**有效期**: 还有 {days_left} 天 (即将过期)")
+                    st.warning(f"**Validity**: {days_left} days remaining (expiring soon)")
                 else:
-                    st.error("**有效期**: 已过期，需要更新")
-        
+                    st.error("**Validity**: Expired, needs update")
+
         # 显示详细信息
-        if st.checkbox("显示详细信息"):
+        if st.checkbox("Show Details"):
             st.json(token_info)
-        
+
         # 测试当前令牌
-        if st.button("🧪 测试当前令牌", key="test_current"):
-            with st.spinner("正在测试JWT令牌..."):
+        if st.button("🧪 Test Current Token", key="test_current"):
+            with st.spinner("Testing JWT token..."):
                 try:
                     is_valid, message = asyncio.run(jwt_manager.test_jwt_token())
                     if is_valid:
@@ -108,34 +108,34 @@ def show_jwt_configuration():
                     else:
                         st.error(f"❌ {message}")
                 except Exception as e:
-                    st.error(f"❌ 测试失败: {e}")
+                    st.error(f"❌ Test failed: {e}")
     else:
-        st.warning("⚠️ 未配置JWT令牌，需要配置后才能访问GWAS数据")
-    
+        st.warning("⚠️ JWT token not configured, configuration required to access GWAS data")
+
     st.markdown("---")
-    
+
     # JWT令牌输入
-    st.markdown("#### 配置新的JWT令牌")
-    
+    st.markdown("#### Configure New JWT Token")
+
     jwt_token = st.text_area(
-        "JWT令牌",
+        "JWT Token",
         height=100,
-        placeholder="请粘贴从OpenGWAS获取的完整JWT令牌...",
-        help="从 https://api.opengwas.io/profile/ 获取JWT令牌"
+        placeholder="Please paste the complete JWT token obtained from OpenGWAS...",
+        help="Get JWT token from https://api.opengwas.io/profile/"
     )
-    
+
     description = st.text_input(
-        "描述 (可选)",
+        "Description (optional)",
         value="OpenGWAS API JWT token for Causal-MCP",
-        help="为此令牌添加描述信息"
+        help="Add description information for this token"
     )
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
-        if st.button("🧪 测试令牌", disabled=not jwt_token.strip()):
+        if st.button("🧪 Test Token", disabled=not jwt_token.strip()):
             if jwt_token.strip():
-                with st.spinner("正在测试JWT令牌..."):
+                with st.spinner("Testing JWT token..."):
                     try:
                         is_valid, message = asyncio.run(jwt_manager.test_jwt_token(jwt_token.strip()))
                         if is_valid:
@@ -145,76 +145,76 @@ def show_jwt_configuration():
                             st.error(f"❌ {message}")
                             st.session_state.jwt_test_passed = False
                     except Exception as e:
-                        st.error(f"❌ 测试失败: {e}")
+                        st.error(f"❌ Test failed: {e}")
                         st.session_state.jwt_test_passed = False
-    
+
     with col2:
         test_passed = st.session_state.get('jwt_test_passed', False)
-        if st.button("💾 保存配置", disabled=not jwt_token.strip()):
+        if st.button("💾 Save Configuration", disabled=not jwt_token.strip()):
             if jwt_token.strip():
-                with st.spinner("正在保存JWT令牌..."):
+                with st.spinner("Saving JWT token..."):
                     try:
                         success = jwt_manager.save_jwt_token(jwt_token.strip(), description.strip())
                         if success:
-                            st.success("✅ JWT令牌配置已保存")
+                            st.success("✅ JWT token configuration saved")
                             st.session_state.jwt_configured = True
                             # 清除测试状态
                             if 'jwt_test_passed' in st.session_state:
                                 del st.session_state.jwt_test_passed
                             st.rerun()
                         else:
-                            st.error("❌ 保存JWT令牌失败")
+                            st.error("❌ Failed to save JWT token")
                     except Exception as e:
-                        st.error(f"❌ 保存失败: {e}")
+                        st.error(f"❌ Save failed: {e}")
 
 
 
 def show_jwt_setup_page():
     """显示完整的JWT设置页面"""
-    st.title("🔑 OpenGWAS JWT令牌配置")
-    
+    st.title("🔑 OpenGWAS JWT Token Configuration")
+
     # 检查是否需要显示设置
     if not jwt_manager.is_token_configured():
-        st.warning("⚠️ 系统需要配置OpenGWAS JWT令牌才能正常工作")
-    
+        st.warning("⚠️ System requires OpenGWAS JWT token configuration to work properly")
+
     # 配置指南
     show_jwt_setup_guide()
-    
+
     st.markdown("---")
-    
+
     # JWT配置
     show_jwt_configuration()
-    
+
 
 
 def check_jwt_requirement():
     """检查JWT令牌要求，如果未配置则显示配置界面"""
     if not jwt_manager.is_token_configured():
-        st.error("❌ 未配置OpenGWAS JWT令牌")
-        st.markdown("系统需要JWT令牌才能访问GWAS数据，请先完成配置。")
-        
-        if st.button("🔧 配置JWT令牌"):
+        st.error("❌ OpenGWAS JWT token not configured")
+        st.markdown("System requires JWT token to access GWAS data, please complete configuration first.")
+
+        if st.button("🔧 Configure JWT Token"):
             st.session_state.show_jwt_setup = True
             st.rerun()
-        
+
         return False
-    
+
     return True
 
 def jwt_status_indicator():
     """显示JWT状态指示器"""
     if jwt_manager.is_token_configured():
         token_info = jwt_manager.get_token_info()
-        
+
         if 'expires_in_days' in token_info:
             days_left = token_info['expires_in_days']
             if days_left > 7:
-                st.success(f"🔑 JWT令牌正常 (还有 {days_left} 天)")
+                st.success(f"🔑 JWT token normal ({days_left} days remaining)")
             elif days_left > 0:
-                st.warning(f"🔑 JWT令牌即将过期 (还有 {days_left} 天)")
+                st.warning(f"🔑 JWT token expiring soon ({days_left} days remaining)")
             else:
-                st.error("🔑 JWT令牌已过期，需要更新")
+                st.error("🔑 JWT token expired, needs update")
         else:
-            st.info("🔑 JWT令牌已配置")
+            st.info("🔑 JWT token configured")
     else:
-        st.error("🔑 未配置JWT令牌")
+        st.error("🔑 JWT token not configured")

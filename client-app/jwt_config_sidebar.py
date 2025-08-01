@@ -69,8 +69,8 @@ def render_jwt_config_section(language: str = "zh") -> bool:
                 if user_info.get('valid') and not user_info.get('needs_verification'):
                     # 提取用户邮箱（如果消息中包含）
                     message = user_info.get('message', '')
-                    if '用户:' in message:
-                        user_part = message.split('用户:')[1].split(',')[0].strip()
+                    if 'User:' in message:
+                        user_part = message.split('User:')[1].split(',')[0].strip()
                         if '@' in user_part:
                             # 只显示邮箱的前几个字符
                             user_display = user_part[:3] + "***@" + user_part.split('@')[1]
